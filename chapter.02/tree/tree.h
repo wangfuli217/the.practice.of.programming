@@ -21,3 +21,4 @@ Nameval *lookup(Nameval *treep, char *name);
 Nameval *nrlookup(Nameval *treep, char *name);
 void applyinorder(Nameval *trepe, void (*fn)(Nameval*, void*), void *arg);
 void applypostorder(Nameval *treep, void (*fn)(Nameval*, void*), void *arg);
+void treesort(Nameval *treep, int *p, char *names[]);

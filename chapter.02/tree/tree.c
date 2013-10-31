@@ -9,7 +9,8 @@ Nameval *newitem(char *name, int value)
     newp = (Nameval *) emalloc(sizeof(Nameval));
     newp->name = name;
     newp->value = value;
-    newp->next = NULL;
+    newp->left = NULL;
+    newp->right = NULL;
     return newp;
 }
 
@@ -29,8 +30,8 @@ void freeall(Nameval *treep)
 {
     if (NULL == treep)
         return;
-    freeall(treep->left)
-    freeall(treep->right)
+    freeall(treep->left);
+    freeall(treep->right);
     free(treep);
 }
 
@@ -90,12 +91,12 @@ Nameval *nrlookup(Nameval *treep, char *name)
 
 
 /* applyinorder: treep에 fn을 중위 순회법으로 적용 */
-void applyinorder(Nameval *trepe, void (*fn)(Nameval*, void*), void *arg)
+void applyinorder(Nameval *treep, void (*fn)(Nameval*, void*), void *arg)
 {
     if (NULL == treep)
         return;
     applyinorder(treep->left, fn, arg);
-    (*fn)(treep, org);
+    (*fn)(treep, arg);
     applyinorder(treep->right, fn, arg);
 }
 
@@ -108,4 +109,16 @@ void applypostorder(Nameval *treep, void (*fn)(Nameval*, void*), void *arg)
     applypostorder(treep->left, fn, arg);
     applypostorder(treep->right, fn, arg);
     (*fn)(treep, arg);
+}
+
+
+/* treesort: 이름 순서대로 정렬 */
+void treesort(Nameval *treep, int *p, char *names[])
+{
+    if (NULL == treep)
+        return;
+    treesort(treep->left, p, names);
+    names[*p] = treep->name;
+    *p += 1;
+    treesort(treep->right, p, names);
 }
